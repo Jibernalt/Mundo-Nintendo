@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/reloj.css">
+  <link rel="stylesheet" href="css/cambio_color.css">
+  <link rel="stylesheet" href="css/agregar.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html"><img src="img/Mundo nintendo (2).png" alt=""
+          style="width: 200px; height: auto;"></a>
+      <div id="reloj"></div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="productos.html">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#index.html#ancla-nosotros">Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="agregar.html">Administrador</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="contacto.html">Contacto</a>
+          </li>
+          <div class="form-check form-switch" style="position: absolute; top: 10px; right: 10px;">
+            <input class="form-check-input" type="checkbox" id="modoOscuroSwitch">
+            <label class="form-check-label" for="modoOscuroSwitch">
+              <span class="luna">🌙</span>
+              <span class="sol">☀️</span>
+              <span class="visually-hidden">Modo Oscuro</span>
+            </label>
+          </div>
+
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+      </div>
+    </div>
+  </nav>
+
+
+
+
+  <div class="text-center p-2 text-black">
+    <h1>Formulario Administrador</h1>
+  </div>
+  <br>
+  <div class="container">
+    <!-- templates/tu_app/administrador.html -->
+    <div class="container mb-5">
+        <div class="row">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombre del Juego</label>
+                  <input type="text" class="form-control" id="{{ form.nombre.id_for_label }}" name="{{ form.nombre.name }}" placeholder="Ingrese el nombre" {% if form.nombre.required %}required{% endif %}>
+              </div>
+          
+              <div class="mb-3">
+                  <label for="{{ form.proveedor.id_for_label }}" class="form-label">Correo Proveedor</label>
+                  <input type="email" class="form-control" id="{{ form.proveedor.id_for_label }}" name="{{ form.proveedor.name }}" placeholder="Ingrese el proveedor" {% if form.proveedor.required %}required{% endif %}>
+              </div>
+          
+              <div class="mb-3">
+                  <label for="{{ form.valor.id_for_label }}" class="form-label">Valor del Juego</label>
+                  <input type="number" class="form-control" id="{{ form.valor.id_for_label }}" name="{{ form.valor.name }}" placeholder="Ingrese el precio" {% if form.valor.required %}required{% endif %}>
+              </div>
+          
+              <div class="mb-3">
+                  <label for="{{ form.foto.id_for_label }}" class="form-label">Foto del Juego</label>
+                  <input type="file" class="form-control" id="{{ form.foto.id_for_label }}" name="{{ form.foto.name }}" accept="image/*" {% if form.foto.required %}required{% endif %}>
+              </div>
+          
+              <div class="mb-3">
+                  <label for="{{ form.cantidad.id_for_label }}" class="form-label">Cantidad</label>
+                  <input type="number" class="form-control" id="{{ form.cantidad.id_for_label }}" name="{{ form.cantidad.name }}" placeholder="Ingrese la cantidad" {% if form.cantidad.required %}required{% endif %}>
+              </div>
+                <button type="submit" class="btn btn-primary">Crear Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sección de la tabla de productos -->
+    <table class="table table-bordered" id="tableData">
+      <thead>
+          <tr>
+              <th scope="col">Correo</th>
+              <th scope="col">Nombre del Juego</th>
+              <th scope="col">Valor del juego</th>
+              <th scope="col">Acciones</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for producto in productos %}
+              <tr>
+                  <td>{{ producto.proveedor }}</td>
+                  <td>{{ producto.nombre }}</td>
+                  <td>{{ producto.valor }}</td>
+                  <td>
+                    <!-- Botón para abrir el modal de edición -->
+                    
+                  </td>
+              </tr>
+               
+          {% endfor %}
+      </tbody>
+    </table>
+  
+    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarModal">Editar</button>
+
+                    <!-- Botón para eliminar el producto -->
+                    <button type="button" class="btn btn-danger btn-sm">Eliminar</button>
+
+                    <!-- Modal de edición para cada producto -->
+                  <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editarModalLabel">Editar Producto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Contenido del modal -->
+                                <p>Este es un modal de ejemplo. Puedes agregar contenido o un formulario aquí.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+  </div>
+
+  <script src="validaciones/administrador.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script src="validaciones/reloj.js"></script>
+  <script src="validaciones/cambio_color.js"></script>
+</body>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+
+  <!-- Right -->
+  <div>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-google"></i>
+    </a>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-linkedin"></i>
+    </a>
+    <a href="" class="me-4 text-reset">
+      <i class="fab fa-github"></i>
+    </a>
+  </div>
+  <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="mundon">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3"></i>Mundo Nintendo
+          </h6>
+          <p>
+            "Mundo Nintendo: Tu elección exclusiva para juegos de Nintendo. Ofrecemos una selección cuidada
+            de títulos, brindando a los fanáticos una experiencia única. Con nuestra dedicación a la calidad y
+            la autenticidad, somos el destino definitivo para los amantes de los juegos de Nintendo."
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Productos
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">Consolas</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Juegos</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Amiibos</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Accesorios</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <img src="img/Mundo nintendo (2).png" class="d-block w-100" alt="..."><br>
+          <p>
+            <a href="#!" class="text-reset">Nosotros</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Ayuda al Cliente</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+          <p><i class="fas fa-home me-3"></i> AV. San jose 15698, San Bernardo</p>
+          <p>
+            <i class="fas fa-envelope me-3"></i>
+            informaciones@mundonintendo.cl
+          </p>
+          <p><i class="fas fa-phone me-3"></i> + 569 56193467</p>
+          <p><i class="fas fa-print me-3"></i> + 562 65987412</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2024 Copyright:
+    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">www.mundonintendo.cl</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+</html>

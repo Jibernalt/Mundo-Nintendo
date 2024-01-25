@@ -1,0 +1,21 @@
+
+#reloj {
+    font-size: 1.5em;
+    text-align: center;
+    color: black;
+    margin-left: auto; /* Mover el reloj a la derecha del navbar */
+    margin-right: 20px;
+  }
+
+  .navbar {
+    background-color: #333;
+    padding: 15px;
+  }
+
+  .navbar-brand {
+    color: white;
+  }
+
+  .item2{
+    background-color: #cfaeae;
+}

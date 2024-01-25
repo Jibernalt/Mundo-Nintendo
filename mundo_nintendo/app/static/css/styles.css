@@ -1,0 +1,68 @@
+.carousel-inner{
+
+    width: 1900PX;
+    
+}
+
+.container{
+
+    margin-top: 100PX;
+   
+}
+
+.card{
+
+    width: 200px;
+    
+}
+
+.card-body{
+
+    display: grid;
+    place-items: center;
+}
+
+.navbar-brand img{
+
+    width: 200px;
+    height: 250pxpx;
+}
+
+.item{
+
+    margin-top: 50px;
+    
+}
+
+.item2{
+
+    margin-top: 80px;
+}
+
+
+
+#body{
+    background: #c5bcbc;
+}
+
+
+
+#btnUpdate{
+    display: none;
+}
+
+
+.item2{
+    background-color: #cfaeae;
+}
+
+.error{
+    color: red;
+}
+
+footer{
+
+    width: 100%;
+    height: 300px;
+
+}

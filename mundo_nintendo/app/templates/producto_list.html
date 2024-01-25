@@ -1,0 +1,267 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrador</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/reloj.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cambio_color.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'listar_productos' %}""><img src="{% static 'img/Mundo nintendo (2).png' %}" alt=""
+          style="width: 200px; height: auto;"></a>
+      <div id="reloj"></div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'catalogo' %}">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#ancla-nosotros">Nosotros</a>
+          </li>
+          {% if user.is_authenticated and user.is_staff %}
+          <!-- Verifica si el usuario está autenticado y es un administrador -->
+          <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'crear_producto' %}">Administrador</a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="contacto.html">Contacto</a>
+          </li>
+          <div class="form-check form-switch" style="position: absolute; top: 10px; right: 10px;">
+            <input class="form-check-input" type="checkbox" id="modoOscuroSwitch">
+            <label class="form-check-label" for="modoOscuroSwitch">
+              <span class="luna">🌙</span>
+              <span class="sol">☀️</span>
+              <span class="visually-hidden">Modo Oscuro</span>
+            </label>
+          </div>
+
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+              <!-- Si el usuario está autenticado, muestra enlace de logout -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              </li>
+          {% else %}
+              <!-- Si el usuario no está autenticado, muestra enlaces de login y registro -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">Registro</a>
+              </li>
+          {% endif %}
+      </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <div id="carouselExample" class="carousel slide" style="max-width: 1500px; margin: auto;" data-bs-ride="carousel"
+    data-bs-interval="3000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'img/carrusel_mario.png' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/CARRUSEL_2.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/CARRUSEL_3.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+
+
+  <div class="item" id="Productos"></div>
+  <h2 style="text-align: center;"> Productos Mas Vendidos</h2>
+  <P style="text-align: center;">¡Bienvenido al catálogo definitivo de Mundo Nintendo, donde la diversión cobra vida en
+    cada juego de
+    Nintendo Switch! Descubre un mundo de emocionantes aventuras, personajes icónicos y desafíos inolvidables. <br>
+    Nuestro catálogo presenta lo mejor de la consola Nintendo Switch, llevando la magia de Nintendo directamente a tus
+    manos.</P>
+
+  <hr>
+  
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+        {% for producto in productos %}
+            <div class="col-md-4 my-2">
+                <div class="card text-center h-100">
+                    <img src="{{ producto.foto.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">${{ producto.valor }}</p>
+                        <p class="card-text">Cantidad: {{ producto.cantidad }}</p>
+                        <a href="{% url 'catalogo' %}" class="btn btn-primary">COMPRAR</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+  <div class="item2" id="Nosotros">
+    <h2 style="text-align: center;" id="ancla-nosotros"> Nosotros</h2>
+    <P style="text-align: center;">Mundo Nintendo, la compañía líder en el universo de los videojuegos, ha transformado
+      la
+      manera en que experimentamos
+      la diversión digital. Desde su fundación en 2023, esta empresa innovadora ha sido la puerta de entrada a mundos
+      imaginarios y emociones cautivadoras.<br>
+
+      <br><strong>Historia de Pasión por los Videojuegos:</strong>
+      <br>Con raíces profundas en la devoción por los videojuegos, Mundo Nintendo fue fundada por un equipo de
+      apasionados
+      jugadores que soñaban con llevar
+      la magia de Nintendo a cada hogar. Desde entonces, la empresa ha crecido exponencialmente, expandiendo su
+      presencia
+      en el mercado y cautivando corazones
+      con sus productos únicos y servicios excepcionales.<br>
+
+      <br><strong>Catálogo Exclusivo y Variedad Asombrosa:</strong>
+      <br>Mundo Nintendo se destaca por su extenso catálogo de productos que abarca desde consolas Nintendo Switch hasta
+      los últimos lanzamientos de juegos.
+      ¿Buscas una aventura épica con Mario, explorar el vasto Hyrule con Link o sumergirte en el encanto relajado de
+      Animal Crossing? En Mundo Nintendo, encontrarás
+      la joya perfecta para satisfacer tus ansias de diversión.<br>
+  </div>
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+  <script src="{% static 'validaciones/api.js' %}"></script>
+  <script src="{% static 'validaciones/reloj.js' %}"></script>
+  <script src="{% static 'validaciones/cambio_color.js' %}"></script>
+
+</body>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-body-tertiary text-muted">
+
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <i class="fas fa-gem me-3"></i>Mundo Nintendo
+          </h6>
+          <p>
+            "Mundo Nintendo: Tu elección exclusiva para juegos de Nintendo. Ofrecemos una selección cuidada
+            de títulos, brindando a los fanáticos una experiencia única. Con nuestra dedicación a la calidad y
+            la autenticidad, somos el destino definitivo para los amantes de los juegos de Nintendo."
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Productos
+          </h6>
+          <p>
+            <a href="#!" class="text-reset">Consolas</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Juegos</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Amiibos</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Accesorios</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <img src="{% static 'img/Mundo nintendo (2).png' %}" class="d-block w-100" alt="..."><br>
+          <p>
+            <a href="#!" class="text-reset">Nosotros</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset">Ayuda al Cliente</a>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+          <p><i class="fas fa-home me-3"></i> AV. San jose 15698, San Bernardo</p>
+          <p>
+            <i class="fas fa-envelope me-3"></i>
+            informaciones@mundonintendo.cl
+          </p>
+          <p><i class="fas fa-phone me-3"></i> + 569 56193467</p>
+          <p><i class="fas fa-print me-3"></i> + 562 65987412</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2024 Copyright:
+    <a class="text-reset fw-bold" href="https://mdbootstrap.com/">www.mundonintendo.cl</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+
+</html>

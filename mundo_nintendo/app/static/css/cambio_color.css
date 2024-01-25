@@ -1,0 +1,76 @@
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    transition: color 0.3s ease;
+}
+
+body.modo-oscuro {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.navbar-dark .navbar-brand, .navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+body.modo-claro {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.navbar-light .navbar-brand, .navbar-light .navbar-nav .nav-link {
+    color: #000000;
+}
+
+body.modo-oscuro input,
+body.modo-oscuro label {
+    color: #ffffff; 
+}
+
+body.modo-oscuro table {
+    color: #ffffff; 
+}
+
+body.modo-oscuro th,
+body.modo-oscuro td {
+    border-color: #ffffff; 
+}
+
+body.modo-oscuro h1 {
+    color: #ffffff;
+}
+
+body.modo-oscuro .col-md-4.my-2 {
+    color: #000000; 
+}
+
+.modal-content{
+    color: #000000;
+}
+
+.navbar-nav .nav-item.active .nav-link {
+    color: #ff0000; /* Cambia el color de texto a rojo para la opción activa */
+}
+
+#modoOscuroSwitch:checked + label .luna,
+#modoOscuroSwitch:not(:checked) + label .sol {
+    display: none;
+}
+
+#modoOscuroSwitch:checked + label .sol,
+#modoOscuroSwitch:not(:checked) + label .luna {
+    font-size: 24px; 
+    display: none;
+}
+
+#modoOscuroSwitch:checked + label .luna,
+#modoOscuroSwitch:not(:checked) + label .sol {
+    display: inline;
+}
+
+#modoOscuroSwitch:checked + label .sol,
+#modoOscuroSwitch:not(:checked) + label .luna {
+    display: none;
+}
